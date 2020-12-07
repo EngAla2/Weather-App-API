@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string-array name="country">
+        <item>Amman</item>
+        <item>Tokyo</item>
+        <item>Las Vegas</item>
+        <item>Torquay</item>
+        <item>Nauru</item>
+        <item>Qatar</item>
+    </string-array>
+</resources>
