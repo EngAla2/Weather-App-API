@@ -6,15 +6,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#3CF1EBF1"
+        android:layout_height="80dp"
+        android:background="@drawable/shape2"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:layout_margin="3dp">
 
         <ImageView
             android:id="@+id/day_icon"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/info" />
 
@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="Day"
+            android:textColor="#FFFFFF"
             android:textSize="20dp" />
         <Space
             android:layout_width="10dp"
@@ -37,8 +38,9 @@
             android:id="@+id/day_temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="temp min - max"
             android:layout_gravity="center_vertical"
+            android:text="temp min - max"
+            android:textColor="#FFFFFF"
             android:textSize="15dp" />
     </LinearLayout>
 

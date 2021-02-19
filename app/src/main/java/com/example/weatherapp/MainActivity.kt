@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.annotation.SuppressLint
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -7,23 +8,25 @@ import android.view.View
 import android.widget.*
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherapp.adapter.ListViewModel
+import com.example.weatherapp.adapter.ListViewModelAdapter
+import com.example.weatherapp.data.country
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+var CITY: String = "Amman,Jo"
+val API: String = "2556a92f449c7c87bef620d62f92223f" // Use API key
+var API_CALL = "https://api.openweathermap.org/data/2.5/onecall?lat=35.95&lon=31.96&units=metric&exclude=hourly,minutely&appid=$API"
 
 class MainActivity : AppCompatActivity() {
 
-    var CITY: String = "Amman,Jo"
-    val API: String = "2556a92f449c7c87bef620d62f92223f" // Use API key
-    var API_CALL = "https://api.openweathermap.org/data/2.5/onecall?lat=35.95&lon=31.96&units=metric&exclude=hourly,minutely&appid=$API"
+
     var weather_list : ListView? = null
     var address: Spinner ? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,28 +41,21 @@ class MainActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-//                CITY = Adapter?.getItemAtPosition(position).toString()
-//                val file: File = File(applicationContext.getFilesDir(), "addressList.json")
-//                val fileReader = FileReader(file)
-//                val bufferedReader = BufferedReader(fileReader)
-//                val stringBuilder = StringBuilder()
-//                var line: String = bufferedReader.readLine()
-//                while (line != null) {
-//                    stringBuilder.append(line).append("\n")
-//                    line = bufferedReader.readLine()
-//                }
-//                bufferedReader.close()
-//
-//                val responce = stringBuilder.toString()
-//                API_CALL = "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&units=metric&exclude=hourly,minutely&appid=$API"
+//                Get selected city
+                CITY = country.valueOf(Adapter?.getItemAtPosition(position).toString()).cor
+//                Update the API call link
+                API_CALL = "https://api.openweathermap.org/data/2.5/onecall?$CITY&units=metric&exclude=hourly,minutely&appid=$API"
+//                Call API again
+                weatherTask().execute()
             }
         }
     }
 
+//   To handel the API request we need AsyncTask
     inner class weatherTask() : AsyncTask<String, Void, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
-            /* Showing the ProgressBar, Making the main design GONE */
+//             Showing the ProgressBar, Making the main container GONE
             findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
             findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.GONE
             findViewById<TextView>(R.id.errorText).visibility = View.GONE
@@ -71,9 +67,8 @@ class MainActivity : AppCompatActivity() {
                 response = URL(API_CALL).readText(
                     Charsets.UTF_8
                 )
-                println("https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API")
-                println(API_CALL)
             }catch (e: Exception){
+//                check for errors
                 response = null
                 print(e.toString())
 
@@ -81,12 +76,13 @@ class MainActivity : AppCompatActivity() {
             return response
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             try {
                 val weatherArrayList = ArrayList<ListViewModel>()
 
-                /* Extracting JSON returns from the API */
+//                 Extracting JSON returns from the API
                 val jsonObj = JSONObject(result)
                 val main = jsonObj.getJSONObject("current")
                 val sys = jsonObj.getString("timezone")
@@ -98,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
                 val address = sys
 
-                /* Populating extracted data into our views */
+//                 Populating extracted data into our views
                 findViewById<TextView>(R.id.updated_at).text =   "Updated at: "+ SimpleDateFormat(
                     "dd/MM/yyyy hh:mm a",
                     Locale.ENGLISH
@@ -142,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 fillListViwe(weatherArrayList)
 
-                /* Views populated, Hiding the loader, Showing the main design */
+//                Views populated, Hiding the loader, Showing the main container design
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
                 findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.VISIBLE
 
@@ -156,6 +152,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+//        handel setting the icon from the network into image view By Picasso
         private fun set_icon_to_img(iconCode: String, img: ImageView) {
             val imageUrl = "http://openweathermap.org/img/w/$iconCode.png"
             Picasso.get()
@@ -166,12 +163,13 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onError(e: Exception?) {
-                        Log.d("icon", "error")
+                        Log.d("icon", "error : $e")
                     }
                 })
         }
 
-    public fun fillListViwe(weatherArrayList: ArrayList<ListViewModel>) {
+//    for the next 7 day, But data on list view adapter
+    fun fillListViwe(weatherArrayList: ArrayList<ListViewModel>) {
         var listViewAdapter = ListViewModelAdapter(this, weatherArrayList as ArrayList)
         weather_list?.adapter = listViewAdapter
         weather_list?.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, position, id ->

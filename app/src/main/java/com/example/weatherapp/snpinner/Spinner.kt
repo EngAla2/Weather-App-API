@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.snpinner
 
 class Spinner {
     var name : String? = null

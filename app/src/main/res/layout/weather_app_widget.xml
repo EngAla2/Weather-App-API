@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/appwidget_text"
+        android:id="@+id/appwidget_temp_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,19 +19,27 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:drawableRight="@drawable/ic_baseline_ac_unit_24"
         android:text="Sat, 15°C "
-        android:textSize="48sp"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
         android:textStyle="bold|italic" />
 
 
-
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:layout_below="@+id/appwidget_text"
+        android:layout_below="@+id/appwidget_temp_day"
         android:layout_marginHorizontal="25dp"
-        android:text="Amman" />
+        android:text="Amman"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/appwidget_temp_day"
+        app:srcCompat="@drawable/humidity" />
 </RelativeLayout>
